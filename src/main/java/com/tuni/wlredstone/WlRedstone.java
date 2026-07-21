@@ -14,6 +14,8 @@ public class WlRedstone implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ModBlocks.initialize();
+		ModBlockEntities.initialize();
 		LOGGER.info("Wireless Redstone initialized!");
 	}
 

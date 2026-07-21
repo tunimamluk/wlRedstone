@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "wlredstone:block/wireless_transceiver"
+    },
+    "powered=true": {
+      "model": "wlredstone:block/wireless_transceiver_on"
+    }
+  }
+}
