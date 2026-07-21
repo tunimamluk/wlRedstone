@@ -18,10 +18,6 @@ public class TransceiverBlockEntity extends BlockEntity {
 	private GlobalPos link;
 	private int inputPower;
 	private int outputPower;
-	// Transient guard: while measuring input, our own emission is zeroed so
-	// wires next to us settle to their true power and we don't read our own
-	// signal back as input.
-	private boolean measuring;
 
 	public TransceiverBlockEntity(BlockPos pos, BlockState state) {
 		super(ModBlockEntities.TRANSCEIVER, pos, state);
@@ -37,7 +33,7 @@ public class TransceiverBlockEntity extends BlockEntity {
 	}
 
 	public int getOutputPower() {
-		return this.measuring ? 0 : this.outputPower;
+		return this.outputPower;
 	}
 
 	public void linkTo(TransceiverBlockEntity other) {
@@ -57,29 +53,13 @@ public class TransceiverBlockEntity extends BlockEntity {
 		this.setOutput(0);
 	}
 
-	/** Re-reads the strongest neighbor signal and pushes it to the linked transceiver. */
+	/** Re-reads the redstone power entering the back and pushes it to the linked transceiver. */
 	public void recomputeInput() {
-		if (this.measuring || !(this.level instanceof ServerLevel serverLevel)) {
+		if (!(this.level instanceof ServerLevel serverLevel)) {
 			return;
 		}
 
-		int newInput;
-		boolean emitting = this.outputPower > 0;
-		this.measuring = true;
-
-		try {
-			if (emitting) {
-				serverLevel.updateNeighborsAt(this.worldPosition, this.getBlockState().getBlock(), null);
-			}
-
-			newInput = serverLevel.getBestNeighborSignal(this.worldPosition);
-		} finally {
-			this.measuring = false;
-		}
-
-		if (emitting) {
-			serverLevel.updateNeighborsAt(this.worldPosition, this.getBlockState().getBlock(), null);
-		}
+		int newInput = TransceiverBlock.getInputSignal(serverLevel, this.worldPosition, this.getBlockState());
 
 		if (newInput != this.inputPower) {
 			this.inputPower = newInput;
@@ -101,7 +81,7 @@ public class TransceiverBlockEntity extends BlockEntity {
 		this.outputPower = power;
 		this.setChanged();
 		this.updatePoweredState();
-		this.level.updateNeighborsAt(this.worldPosition, this.getBlockState().getBlock(), null);
+		TransceiverBlock.updateNeighborsInFront(this.level, this.worldPosition, this.getBlockState());
 	}
 
 	/** Called when this transceiver is destroyed: unlink the partner so it stops outputting. */
@@ -109,7 +89,7 @@ public class TransceiverBlockEntity extends BlockEntity {
 		if (this.level instanceof ServerLevel serverLevel) {
 			TransceiverBlockEntity partner = this.getPartner(serverLevel);
 
-			if (partner != null && this.getBlockPos().equals(partner.link == null ? null : partner.link.pos())) {
+			if (partner != null && partner.link != null && this.getBlockPos().equals(partner.link.pos())) {
 				partner.clearLink();
 			}
 		}

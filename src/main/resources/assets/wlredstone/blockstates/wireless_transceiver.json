@@ -1,10 +1,12 @@
 {
   "variants": {
-    "powered=false": {
-      "model": "wlredstone:block/wireless_transceiver"
-    },
-    "powered=true": {
-      "model": "wlredstone:block/wireless_transceiver_on"
-    }
+    "facing=south,powered=false": { "model": "wlredstone:block/wireless_transceiver" },
+    "facing=south,powered=true": { "model": "wlredstone:block/wireless_transceiver_on" },
+    "facing=west,powered=false": { "model": "wlredstone:block/wireless_transceiver", "y": 90 },
+    "facing=west,powered=true": { "model": "wlredstone:block/wireless_transceiver_on", "y": 90 },
+    "facing=north,powered=false": { "model": "wlredstone:block/wireless_transceiver", "y": 180 },
+    "facing=north,powered=true": { "model": "wlredstone:block/wireless_transceiver_on", "y": 180 },
+    "facing=east,powered=false": { "model": "wlredstone:block/wireless_transceiver", "y": 270 },
+    "facing=east,powered=true": { "model": "wlredstone:block/wireless_transceiver_on", "y": 270 }
   }
 }
