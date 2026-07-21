@@ -6,8 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
@@ -59,6 +61,34 @@ public class TransceiverBlock extends Block implements EntityBlock {
 		}
 
 		return super.updateShape(state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
+	}
+
+	@Override
+	protected boolean isSignalSource(BlockState state) {
+		return true;
+	}
+
+	@Override
+	protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return level.getBlockEntity(pos) instanceof TransceiverBlockEntity transceiver ? transceiver.getOutputPower() : 0;
+	}
+
+	@Override
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, Orientation orientation, boolean movedByPiston) {
+		super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston);
+
+		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof TransceiverBlockEntity transceiver) {
+			transceiver.recomputeInput();
+		}
+	}
+
+	@Override
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+		super.onPlace(state, level, pos, oldState, movedByPiston);
+
+		if (!level.isClientSide() && !oldState.is(this) && level.getBlockEntity(pos) instanceof TransceiverBlockEntity transceiver) {
+			transceiver.recomputeInput();
+		}
 	}
 
 	@Override

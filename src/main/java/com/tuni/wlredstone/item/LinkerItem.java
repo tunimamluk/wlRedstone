@@ -60,8 +60,7 @@ public class LinkerItem extends Item {
 			return InteractionResult.SUCCESS;
 		}
 
-		first.setLink(clicked);
-		second.setLink(stored);
+		first.linkTo(second);
 		stack.remove(ModDataComponents.LINKING_FROM);
 		message(player, "item.wlredstone.linker.linked");
 		return InteractionResult.SUCCESS;
