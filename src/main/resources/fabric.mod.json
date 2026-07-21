@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "wlredstone",
+	"version": "${version}",
+	"name": "Wireless Redstone",
+	"description": "Adds wireless redstone! Place two transceivers and connect them with the Linker item.",
+	"authors": [
+		"tuni"
+	],
+	"contact": {
+		"sources": "https://github.com/tunimamluk/wlRedstone"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/wlredstone/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.tuni.wlredstone.WlRedstone"
+		],
+		"client": [
+			"com.tuni.wlredstone.client.WlRedstoneClient"
+		]
+	},
+	"mixins": [
+		"wlredstone.mixins.json",
+		{
+			"config": "wlredstone.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
