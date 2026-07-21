@@ -1,3 +1,9 @@
 {
-  "block.wlredstone.wireless_transceiver": "Wireless Transceiver"
+  "block.wlredstone.wireless_transceiver": "Wireless Transceiver",
+  "item.wlredstone.linker": "Linker",
+  "item.wlredstone.linker.selected": "Saved position %s, %s, %s — now right-click the second transceiver",
+  "item.wlredstone.linker.same_block": "That's the same transceiver! Pick a different one",
+  "item.wlredstone.linker.lost": "The first transceiver is gone — selection cleared",
+  "item.wlredstone.linker.linked": "Linked!",
+  "item.wlredstone.linker.cleared": "Selection cleared"
 }
